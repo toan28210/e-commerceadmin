@@ -107,8 +107,8 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             <img
-                 src="https://i.ibb.co/N9sDRwm/logo1.png"
-                 alt="E-Social"
+                 src={logo.imgSrc}
+                 alt="Shoppe"
               className="navbar-brand-img"
             />
           </NavbarBrand>

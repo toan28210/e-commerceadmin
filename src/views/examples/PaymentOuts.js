@@ -20,6 +20,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import {NumberFormatBase} from 'react-number-format';
+import { BASE_URL } from "config/networkConfigs";
 
 
 const PaymentOuts = () => {
@@ -29,10 +30,10 @@ const PaymentOuts = () => {
   const cookies = new Cookies();
   useEffect(async () => {
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/paymentOuts",
+      `${BASE_URL}/paymentOuts`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
@@ -42,10 +43,10 @@ const PaymentOuts = () => {
 
   useEffect(async () => {
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/paymentOuts?offset=2",
+      `${BASE_URL}/paymentOuts?offset=2`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );

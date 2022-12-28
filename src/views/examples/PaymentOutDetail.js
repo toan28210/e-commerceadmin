@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
 import Cookies from "universal-cookie";
+import { BASE_URL } from "config/networkConfigs";
 const cookies = new Cookies();
 
 const PaymentOutDetail = ({ match }) => {
@@ -25,10 +26,10 @@ const PaymentOutDetail = ({ match }) => {
   useEffect(async () => {
     const { idPaymentOut } = match.params
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/withdraw/" + idPaymentOut,
+      `${BASE_URL}/withdraw/${idPaymentOut}`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     )
@@ -174,10 +175,10 @@ function UserInfo({ idUser }) {
 
   useEffect(async () => {
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/user/" + idUser + "/info",
+      "`${BASE_URL}/user/" + idUser + "/info",
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     )
@@ -275,11 +276,11 @@ function TranStatus({ data, id }) {
 
   const Confirm = () => { 
     return axios.get(
-      "http://192.53.114.191:3001/api/withdraw/" +
+      "`${BASE_URL}/withdraw/" +
         id + "?success=true",
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
@@ -287,11 +288,11 @@ function TranStatus({ data, id }) {
 
   const Cancel = () => {
     return axios.get(
-      "http://192.53.114.191:3001/api/withdraw/" +
+      "`${BASE_URL}/withdraw/" +
         id + "?success=false",
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );

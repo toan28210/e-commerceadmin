@@ -16,6 +16,8 @@ import {
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import logo from '../../assets/img/brand/shopee-logo-1589778324075-1477812832.jpg'
+import { BASE_URL } from "config/networkConfigs";
 // import Notification from "./Notification";
 
 // import Forgot from "./Forgot";
@@ -31,7 +33,7 @@ const Login = () => {
 
   async function loginUser(credentials) {
     return axios.post(
-      "http://192.53.114.191:3001/api/login",
+      `${BASE_URL}/auth/login`,
       credentials
     );
   }
@@ -51,16 +53,16 @@ const Login = () => {
       }
 
       const user = await loginUser({ email, password });
-      if (user.data.token && user.data.role === "admin") {
-        cookies.set("token", user.data.token, {path: "/"});
-        cookies.set("id", user.data.id);
-        navigate("/admin/index");
-        window.location.reload();
+      if (user.data.accessToken && user.data.isAdmin == true) {
+        cookies.set("accessToken", user.data.accessToken, {path: "/"});
+        cookies.set("id", user.data._id);
+         navigate("/admin/index");
       } else {
         setErrName("Email or password incorrect!");
       }
     } catch (error) {
       console.log(error);
+      setErrName("Email or password incorrect!");
     }
   };
 
@@ -70,8 +72,8 @@ const Login = () => {
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
               <img
-                src="https://i.ibb.co/N9sDRwm/logo1.png"
-                alt="E-Social"
+                src={logo}
+                alt="Shoppe"
                 border="0"
                 width={"200px"}
               ></img>

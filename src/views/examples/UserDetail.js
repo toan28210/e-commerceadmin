@@ -30,10 +30,10 @@ const UserDetail = (props) => {
   useEffect(async () => {
     console.log(idUser);
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/user/" + idUser + "/info",
+      "`${BASE_URL}/user/" + idUser + "/info",
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
@@ -44,11 +44,11 @@ const UserDetail = (props) => {
   // const onToggle = (id) => {
   //   console.log(id);
   //   return axios.post(
-  //     "https://web-be-brmc9.ondigitalocean.app/api/user/" + id + "/block",
+  //     "`${BASE_URL}/user/" + id + "/block",
   //     null,
   //     {
   //       headers: {
-  //         Authorization: "Bearer " + cookies.get("token"),
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
   //       },
   //     }
   //   );

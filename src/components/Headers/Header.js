@@ -4,48 +4,50 @@ import Cookies from "universal-cookie";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import {USERS_BASE_URL} from '../../config/networkConfigs';
+
 
 const Header = () => {
   const [user, setUser] = useState({ users: [] });
-  const [group, setGroup] = useState({ groups: [] });
-  const [post, setPost] = useState({ posts: [] });
+  const [order, setOrder] = useState({ orders: [] });
+  const [product, setProduct] = useState({ products: [] });
 
   const cookies = new Cookies();
-  useEffect(async () => {
-    const result = await axios(
-      "http://192.53.114.191:3001/api/users",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-    setUser(result.data);
-  }, []);
+  // useEffect(async () => {
+  //   const result = await axios(
+  //     USERS_BASE_URL,
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  //   setUser(result.data);
+  // }, []);
 
-  useEffect(async () => {
-    const result = await axios.get(
-      "http://192.53.114.191:3001/api/groups?offset=1&limit=50",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-    setGroup(result.data);
-  }, []);
+  // useEffect(async () => {
+  //   const result = await axios.get(
+  //     "`${BASE_URL}/groups?offset=1&limit=50",
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  //   setOrder(result.data);
+  // }, []);
 
-  useEffect(async () => {
-    const result = await axios(
-      "http://192.53.114.191:3001/api/posts/admin",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-    setPost(result.data);
-  }, []);
+  // useEffect(async () => {
+  //   const result = await axios(
+  //     "`${BASE_URL}/posts/admin",
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  //   setProduct(result.data);
+  // }, []);
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -92,10 +94,10 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                         Total Groups
+                         Total Orders
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {group.groups.length}
+                          {order.orders.length}
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -122,9 +124,9 @@ const Header = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                         Total Posts
+                         Total Products
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{post.posts.length}</span>
+                        <span className="h2 font-weight-bold mb-0">{product.products.length}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -152,7 +154,7 @@ const Header = () => {
                         >
                          Total Subjects
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{group.groups.length}</span>
+                        <span className="h2 font-weight-bold mb-0">{order.orders.length}</span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-info text-white rounded-circle shadow">

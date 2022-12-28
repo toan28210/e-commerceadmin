@@ -5,8 +5,8 @@ import Profile from "views/examples/Profile.js";
 import Forgot from "views/examples/Forgot.js";
 import NewPass from "views/examples/NewPass.js";
 import Users from "views/examples/Users.js";
-import Posts from "views/examples/Posts.js";
-import Groups from "views/examples/Groups.js";
+import Products from "views/examples/Products.js";
+import Orders from "views/examples/Orders.js";
 import UserDetail from "views/examples/UserDetail.js";
 import Payments from "views/examples/Payments.js";
 import PaymentDetail from "views/examples/PaymentDetail.js"
@@ -37,17 +37,17 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/posts",
-    name: "Posts",
+    path: "/products",
+    name: "Products",
     icon: "ni ni-album-2 text-green",
-    component: Posts,
+    component: Products,
     layout: "/admin",
   },
   {
     path: "/groups",
-    name: "Groups",
+    name: "Orders",
     icon: "ni ni-folder-17 text-blue",
-    component: Groups,
+    component: Orders,
     layout: "/admin",
   },
   {

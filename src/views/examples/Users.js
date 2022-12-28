@@ -29,6 +29,7 @@ import Cookies from "universal-cookie";
 import ToggleButton from "react-toggle-button";
 import Avatar from "@mui/material/Avatar";
 import dateFormat from "dateformat";
+import { USERS_BASE_URL } from "config/networkConfigs";
 
 const Users = () => {
   const [data, setData] = useState({ users: [] });
@@ -38,40 +39,53 @@ const Users = () => {
   const [next, setNext] = useState(false);
 
   const cookies = new Cookies();
+  
   useEffect(async () => {
-    const result = await axios(
-      "http://192.53.114.191:3001/api/users",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
+    async function loadUsers(){
+      try{
+        const result = await axios(
+          USERS_BASE_URL,
+          {
+            headers: {
+              Authorization: "Bearer " + cookies.get("accessToken"),
+            },
+          }
+        );
+        console.log(result.data.users);
+        setData(result.data);
+      }catch{
+          console.log("error");
       }
-    );
-    console.log(result.data.users);
-    setData(result.data);
+    }
+    await loadUsers();
   }, []);
 
-  useEffect(async () => {
-    const result = await axios.get(
-      "http://192.53.114.191:3001/api/users?offset=2",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-    setData1(result.data);
-    console.log(result.data);
-  }, []);
+  // useEffect(async () => {
+  //   try{
+  //     const result = await axios.get(
+  //       USERS_BASE_URL+"?offset=2",
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + cookies.get("accessToken"),
+  //         },
+  //       }
+  //     );
+  //     setData1(result.data);
+  //     console.log(result.data);
+  //   }catch{
+
+  //   }
+    
+  // }, []);
 
   const onToggle = (id) => {
     console.log(id);
     return axios.post(
-      "http://192.53.114.191:3001/api/user/" + id + "/block",
+      `${USERS_BASE_URL}/id/block` ,
       null,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
@@ -80,7 +94,7 @@ const Users = () => {
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     const results = data.users.filter(({ username }) =>
       username.toLowerCase().includes(searchTerm)
     );

@@ -15,9 +15,9 @@ import Forgot from "views/examples/Forgot";
 import NewPass from "views/examples/NewPass";
 import Dashboard from "views/examples/Dashboard";
 import Users from "views/examples/Users";
-import Posts from "views/examples/Posts";
+import Products from "views/examples/Products";
 import Payments from "views/examples/Payments";
-import Groups from "views/examples/Groups";
+import Orders from "views/examples/Orders";
 import UserDetail from "views/examples/PaymentDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -28,8 +28,8 @@ root.render(
       <Route path="/admin/*" element={<AdminLayout/>} component={props => <AdminLayout {...props} />} >
         <Route path="index" element = {<Dashboard/>} />
         <Route path="users" element = {<Users/>} />
-        <Route path="posts" element = {<Posts/>} />
-        <Route path="groups" element = {<Groups/>} />
+        <Route path="products" element = {<Products/>} />
+        <Route path="groups" element = {<Orders/>} />
         <Route path="payments" element = {<Payments/>} />
         <Route path="user" element = {<Outlet/>} >
            <Route path=":idUser/info" element={<UserDetail/> }/> 

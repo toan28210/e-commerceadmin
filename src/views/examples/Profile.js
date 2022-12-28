@@ -17,17 +17,17 @@ import axios from "axios";
 import React from "react";
 import Cookies from "universal-cookie";
 import Avatar from "@mui/material/Avatar";
-
+import { BASE_URL } from "config/networkConfigs";
 const Profile = () => {
   const cookies = new Cookies();
   const [data, setData] = useState({ user: [] });
   useEffect(async () => {
     const id = cookies.get("id");
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/user/info",
+      `${BASE_URL}/user/info`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );

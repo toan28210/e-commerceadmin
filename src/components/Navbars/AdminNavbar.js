@@ -25,7 +25,7 @@ const AdminNavbar = (props) => {
   const history = useNavigate();
   const cookies = new Cookies();
   const handleLogout = () => {
-    cookies.remove("token", {path: "/"});
+    cookies.remove("accessToken", {path: "/"});
     history.push("/auth/login");
   };
 

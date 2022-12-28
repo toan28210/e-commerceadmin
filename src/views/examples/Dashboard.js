@@ -21,164 +21,164 @@ import Header from "components/Headers/Header.js";
 
 const Dashboard = (props) => {
   const cookies = new Cookies();
-  const [Group, setGroup] = useState({ groups: [] });
-  const [Payment, setPayment] = useState({ payments: [] });
-  const [PaymentOut, setPaymentOut] = useState({ payments: [] });
-  const [dateRange, setDateRange] = useState([]);
-  const [amount, setAmount] = useState(0);
-  const [amount1, setAmount1] = useState(0);
-  const [dataChart, setDataChart] = useState([]);
+  // const [Order, setGroup] = useState({ groups: [] });
+  // const [Payment, setPayment] = useState({ payments: [] });
+  // const [PaymentOut, setPaymentOut] = useState({ payments: [] });
+  // const [dateRange, setDateRange] = useState([]);
+  // const [amount, setAmount] = useState(0);
+  // const [amount1, setAmount1] = useState(0);
+  // const [dataChart, setDataChart] = useState([]);
 
-  console.log("amount", amount);
+  // console.log("amount", amount);
 
-  const data = {
-    labels: Group.groups.map((o) => o.group_name),
+  // const data = {
+  //   labels: Order.groups.map((o) => o.group_name),
+  //   datasets: [
+  //     {
+  //       label: "Users",
+  //       fill: false,
+  //       lineTension: 0.0,
+  //       backgroundColor: "#c45850",
+  //       borderColor: "rgb(41, 33, 116,0.5)",
+  //       pointHitRadius: 20,
+  //       data: Order.groups.map((o) => parseFloat(o.user_id.length)),
+  //     },
+  //   ],
+  // };
+  // const data1 = {
+  //   labels: Order.groups.map((o) => o.group_name),
 
-    datasets: [
-      {
-        label: "Users",
-        fill: false,
-        lineTension: 0.0,
-        backgroundColor: "#c45850",
-        borderColor: "rgb(41, 33, 116,0.5)",
-        pointHitRadius: 20,
-        data: Group.groups.map((o) => parseFloat(o.user_id.length)),
-      },
-    ],
-  };
-  const data1 = {
-    labels: Group.groups.map((o) => o.group_name),
+  //   datasets: [
+  //     {
+  //       label: "Users",
+  //       fill: false,
+  //       lineTension: 0.0,
+  //       backgroundColor: [
+  //         "#8e5ea2",
+  //         "#3cba9f",
+  //         "#e8c3b9",
+  //         "#c45850",
+  //         "#F473B9",
+  //         "#F4FCD9",
+  //         "#C5D8A4",
+  //         "#BB9981",
+  //         "#534340",
+  //         "#3e95cd",
+  //         "#1B1A17",
+  //         "#F0A500",
+  //         "#E45826",
+  //         "#E6D5B8",
+  //       ],
+  //       borderColor: "rgb(41, 33, 116,0.5)",
+  //       pointHitRadius: 20,
+  //       data: Order.groups.map((o) => parseFloat(o.posts.length)),
+  //     },
+  //   ],
+  // };
 
-    datasets: [
-      {
-        label: "Users",
-        fill: false,
-        lineTension: 0.0,
-        backgroundColor: [
-          "#8e5ea2",
-          "#3cba9f",
-          "#e8c3b9",
-          "#c45850",
-          "#F473B9",
-          "#F4FCD9",
-          "#C5D8A4",
-          "#BB9981",
-          "#534340",
-          "#3e95cd",
-          "#1B1A17",
-          "#F0A500",
-          "#E45826",
-          "#E6D5B8",
-        ],
-        borderColor: "rgb(41, 33, 116,0.5)",
-        pointHitRadius: 20,
-        data: Group.groups.map((o) => parseFloat(o.posts.length)),
-      },
-    ],
-  };
+  // async function getGroups() {
+  //   return await axios.get(
+  //     "`${BASE_URL}/groups?offset=1&limit=50",
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  // }
+  // async function getPaymentOut() {
+  //   return await axios.get(
+  //     "`${BASE_URL}/paymentOuts",
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  // }
+  // async function getPayment() {
+  //   return await axios.get(
+  //     "`${BASE_URL}/payments",
+  //     {
+  //       headers: {
+  //         Authorization: "Bearer " + cookies.get("accessToken"),
+  //       },
+  //     }
+  //   );
+  // }
+  // useEffect(async () => {
+    // const groups = (await getGroups()).data;
+    // setGroup(groups);
 
-  async function getGroups() {
-    return await axios.get(
-      "http://192.53.114.191:3001/api/groups?offset=1&limit=50",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-  }
-  async function getPaymentOut() {
-    return await axios.get(
-      "http://192.53.114.191:3001/api/paymentOuts",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-  }
-  async function getPayment() {
-    return await axios.get(
-      "http://192.53.114.191:3001/api/payments",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-  }
-  useEffect(async () => {
-    const groups = (await getGroups()).data;
-    setGroup(groups);
+    // const payment = (await getPayment()).data.payments;
+    // setPayment(payment);
 
-    const payment = (await getPayment()).data.payments;
-    setPayment(payment);
+    // const paymentOuts = (await getPaymentOut()).data.payments;
+    // setPaymentOut(paymentOuts);
 
-    const paymentOuts = (await getPaymentOut()).data.payments;
-    setPaymentOut(paymentOuts);
+    // const arrRange = payment.map((v) =>
+      // new Date(v.createdAt).toLocaleDateString("en-US")
+    // );
+  //   let dateArray = [];
+  //   arrRange.map((v, i, arr) => {
+  //     if (!dateArray.includes(v)) dateArray.push(v);
+  //   });
+  //   setDateRange(dateArray);
 
-    const arrRange = payment.map((v) =>
-      new Date(v.createdAt).toLocaleDateString("en-US")
-    );
-    let dateArray = [];
-    arrRange.map((v, i, arr) => {
-      if (!dateArray.includes(v)) dateArray.push(v);
-    });
-    setDateRange(dateArray);
+  //   const dataChart = dateArray.map((v) => {
+  //     const arrayAmount = payment
+  //       .filter(
+  //         (item) => new Date(item.createdAt).toLocaleDateString("en-US") == v
+  //       )
+  //       .map((value) => Number(value.amount));
 
-    const dataChart = dateArray.map((v) => {
-      const arrayAmount = payment
-        .filter(
-          (item) => new Date(item.createdAt).toLocaleDateString("en-US") == v
-        )
-        .map((value) => Number(value.amount));
+  //     const sumPayment = arrayAmount.reduce((prev, current) => prev + current);
+  //     const arrayAmountOut = paymentOuts
+  //       .filter(
+  //         (item) => new Date(item.createdAt).toLocaleDateString("en-US") == v
+  //       )
+  //       .map((value) => Number(value.amount));
+  //     const sumPaymentOut = arrayAmountOut.reduce(
+  //       (prev, current) => prev + current,
+  //       0
+  //     );
+  //     return { in: sumPayment, out: sumPaymentOut };
+  //   });
+  //   setDataChart(dataChart);
+  // }, []);
 
-      const sumPayment = arrayAmount.reduce((prev, current) => prev + current);
-      const arrayAmountOut = paymentOuts
-        .filter(
-          (item) => new Date(item.createdAt).toLocaleDateString("en-US") == v
-        )
-        .map((value) => Number(value.amount));
-      const sumPaymentOut = arrayAmountOut.reduce(
-        (prev, current) => prev + current,
-        0
-      );
-      return { in: sumPayment, out: sumPaymentOut };
-    });
-    setDataChart(dataChart);
-  }, []);
+  // const deviceSaleData = {
+  //   labels: dateRange.map((item) => item),
 
-  const deviceSaleData = {
-    labels: dateRange.map((item) => item),
-
-    datasets: [
-      {
-        label: "Income",
-        data: dataChart.map((o) => o.in),
-        backgroundColor: "#a461d8",
-        borderColor: "#a461d8",
-        borderWidth: 1,
-        fill: false,
-      },
-      {
-        label: "Outcome",
-        data: dataChart.map((o) => o.out),
-        // dataChart.map((o) => o.out),
-        backgroundColor: "#fc5a5a",
-        borderColor: "#fc5a5a",
-        borderWidth: 1,
-        fill: false,
-      },
-    ],
-  };
+  //   datasets: [
+  //     {
+  //       label: "Income",
+  //       data: dataChart.map((o) => o.in),
+  //       backgroundColor: "#a461d8",
+  //       borderColor: "#a461d8",
+  //       borderWidth: 1,
+  //       fill: false,
+  //     },
+  //     {
+  //       label: "Outcome",
+  //       data: dataChart.map((o) => o.out),
+  //       // dataChart.map((o) => o.out),
+  //       backgroundColor: "#fc5a5a",
+  //       borderColor: "#fc5a5a",
+  //       borderWidth: 1,
+  //       fill: false,
+  //     },
+  //   ],
+  // };
   return (
     <>
       <Header />
       {/* Page content */}
-      {console.log(Group)}
-      {!Group ? (
+      {/* {console.log(Order)}
+      {!Order ? (
         <div>Loading</div>
-      ) : (
+      ) :  */}
+      (
         <>
           <Container className="mt--7" fluid>
             <Row className="mt-5">
@@ -199,13 +199,13 @@ const Dashboard = (props) => {
                   <CardBody>
                     {/* Chart */}
                     <div className="chart">
-                      <Bar
+                      {/* <Bar
                         height={10}
                         options={{
                           maintainAspectRatio: false,
                         }}
                         data={deviceSaleData}
-                      />
+                      /> */}
                     </div>
                   </CardBody>
                 </Card>
@@ -222,7 +222,7 @@ const Dashboard = (props) => {
                           Overview
                         </h6>
                         <h3 className="text-white mb-0">
-                          Statistics of the number of users in each group.
+                          Statistics of the number of users in each order.
                         </h3>
                       </div>
                     </Row>
@@ -230,13 +230,13 @@ const Dashboard = (props) => {
                   <CardBody>
                     {/* Chart */}
                     <div className="chart">
-                      <Bar
+                      {/* <Bar
                         height={10}
                         options={{
                           maintainAspectRatio: false,
                         }}
                         data={data}
-                      />
+                      /> */}
                     </div>
                   </CardBody>
                 </Card>
@@ -250,7 +250,7 @@ const Dashboard = (props) => {
                           Performance
                         </h6>
                         <h3 className="mb-0">
-                          Statistics of the number of posts in each group.
+                          Statistics of the number of posts in each order.
                         </h3>
                       </div>
                     </Row>
@@ -258,13 +258,13 @@ const Dashboard = (props) => {
                   <CardBody>
                     {/* Chart */}
                     <div className="chart">
-                      <Doughnut
+                      {/* <Doughnut
                         height={1}
                         options={{
                           maintainAspectRatio: false,
                         }}
                         data={data1}
-                      />
+                      /> */}
                     </div>
                   </CardBody>
                 </Card>
@@ -317,7 +317,8 @@ const Dashboard = (props) => {
             </Row> */}
           </Container>
         </>
-      )}
+      )
+      {/* } */}
     </>
   );
 };

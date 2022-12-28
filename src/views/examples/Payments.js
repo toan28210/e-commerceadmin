@@ -20,31 +20,35 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import {NumberFormatBase} from 'react-number-format';
-
+import { PAYMENTS_BASE_URL } from "config/networkConfigs";
 const Payments = () => {
   const [data, setData] = useState({ payments: [] });
   const [data1, setData1] = useState({ payments: [] });
   const [next, setNext] = useState(false);
   const cookies = new Cookies();
   useEffect(async () => {
-    const result = await axios.get(
-      "http://192.53.114.191:3001/api/payments",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("token"),
-        },
-      }
-    );
-    setData(result.data);
-    console.log(result.data.payments);
+    async function loadPayments(){
+      const result = await axios.get(
+        PAYMENTS_BASE_URL,
+        {
+          headers: {
+            Authorization: "Bearer " + cookies.get("accessToken"),
+          },
+        }
+      );
+      setData(result.data);
+      console.log(result.data.payments);
+
+    }
+    loadPayments();
   }, []);
 
   useEffect(async () => {
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/payments?offset=2",
+      `${PAYMENTS_BASE_URL}?offset=2`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );

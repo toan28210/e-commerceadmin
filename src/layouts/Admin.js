@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
+import { useLocation, Route, Routes, Navigate, Outlet } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
@@ -11,7 +11,6 @@ import routes from "../routes";
 import Login from "views/examples/Login.js";
 import { useNavigate } from "react-router-dom";
 const cookies = new Cookies();
-const cookie = cookies.get("token");
 const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -22,38 +21,9 @@ const Admin = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        console.log(prop.layout + prop.path);
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            element={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
-
-  const getBrandText = (path) => {
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
-        -1
-      ) {
-        return routes[i].name;
-      }
-    }
-    return "Brand";
-  };
-
   return (
     <>
-      { (!cookie) ? (
+      { (!cookies.get("accessToken")) ? (
         window.location.replace("/auth/login")
       ) : (
         <div>
@@ -62,7 +32,7 @@ const Admin = (props) => {
             routes={routes}
             logo={{
               innerLink: "/admin/index",
-              imgSrc: require("../assets/img/brand/argon-react.png").default,
+              imgSrc: require("../assets/img/brand/shopee-logo-1589778324075-1477812832.jpg"),
               imgAlt: "...",
             }}
           />
@@ -70,15 +40,8 @@ const Admin = (props) => {
           <div className="main-content" ref={mainContent}>
             <AdminNavbar
               {...props}
-              brandText={getBrandText(props.location.pathname)}
             />
-            <Routes>
-              {getRoutes(routes)}
-              <Route
-                path="/"
-                element={<Navigate to="/admin/index" replace />}
-              />
-            </Routes>
+            <Outlet/>
             <Container fluid>
               <AdminFooter />
             </Container>

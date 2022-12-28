@@ -15,6 +15,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import logo from '../../assets/img/brand/shopee-logo-1589778324075-1477812832.jpg'
 
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +30,7 @@ const NewPass = ({ email }) => {
 
   async function passwordWord(credentials) {
     return axios.post(
-      "http://192.53.114.191:3001/api/sendmailForget/confirm",
+      "`${BASE_URL}/sendmailForget/confirm",
       credentials
     );
   }
@@ -74,8 +75,8 @@ const NewPass = ({ email }) => {
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
               <img
-                src="https://i.ibb.co/N9sDRwm/logo1.png"
-                alt="E-Social"
+                src={logo}
+                alt="Shoppe"
                 border="0"
                 width={"200px"}
               ></img>

@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
 import Cookies from "universal-cookie";
+import { USERS_BASE_URL,BASE_URL } from "config/networkConfigs";
+
 
 const UserDetail = ({ match }) => {
   const cookies = new Cookies();
@@ -29,10 +31,10 @@ const UserDetail = ({ match }) => {
     console.log(match.params);
     const { idPayment } = match.params;
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/payment/" + idPayment,
+      `${BASE_URL}/payment/${idPayment}`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
@@ -143,10 +145,10 @@ function UserInfo({ idUser }) {
 
   useEffect(async () => {
     const result = await axios.get(
-      "http://192.53.114.191:3001/api/user/" + idUser + "/info",
+      `${BASE_URL}/user/${idUser}/info`,
       {
         headers: {
-          Authorization: "Bearer " + cookies.get("token"),
+          Authorization: "Bearer " + cookies.get("accessToken"),
         },
       }
     );
