@@ -44,7 +44,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/groups",
+    path: "/orders",
     name: "Orders",
     icon: "ni ni-folder-17 text-blue",
     component: Orders,

@@ -27,10 +27,10 @@ root.render(
     <Routes>
       <Route path="/admin/*" element={<AdminLayout/>} component={props => <AdminLayout {...props} />} >
         <Route path="index" element = {<Dashboard/>} />
-        <Route path="users" element = {<Users/>} />
-        <Route path="products" element = {<Products/>} />
-        <Route path="groups" element = {<Orders/>} />
-        <Route path="payments" element = {<Payments/>} />
+        <Route path="users" element = {<Users key="users"/>} />
+        <Route path="products" element = {<Products key="products-key"/>} />
+        <Route path="groups" element = {<Orders key="orderds-key" />} />
+        <Route path="payments" element = {<Payments  key="payments-key" />} />
         <Route path="user" element = {<Outlet/>} >
            <Route path=":idUser/info" element={<UserDetail/> }/> 
           </Route>

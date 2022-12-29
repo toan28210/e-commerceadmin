@@ -15,6 +15,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
+
 // core components
 import Header from "components/Headers/Header.js";
 import { useEffect, useRef, useState } from "react";
@@ -26,17 +27,52 @@ import { Image } from "antd";
 import "antd/dist/antd.css";
 import { BASE_URL } from "config/networkConfigs";
 import { PRODUCTS_BASE_URL } from "config/networkConfigs";
-
+import PagingListItem from "components/Pagings/PaginListItem";
+import ProductModel from "components/Models/ProductModel";
+import {   IconButton } from "@mui/material";
+import Button from 'react-bootstrap/Button';
 const Products = () => {
   const [remoteData,setRemoteData] = useState({ products: [] })
   const [data, setData] = useState({ products: [] });
+  const [currentProduct,setCurrentProduct] = useState({});
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   // const [data1, setData1] = useState({ payments: [] });
   const [next, setNext] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [page,setPage] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
+  const [isEdit,setIsEdit] = useState(false);
   const cookies = new Cookies();
+  const RECORD_PER_PAGE = 15;
 
+  function handleCreate(){
+    handleOpen();
+    setCurrentProduct();
+    setIsEdit(false);
+  }
+  function handleEdit(product){
+    handleOpen();
+    setCurrentProduct(product);
+    setIsEdit(true);
+
+  }
+  async function handleDelete(id){
+    try {
+      const result = await axios.delete(
+        `${PRODUCTS_BASE_URL}/${id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + cookies.get("accessToken"),
+          },
+        }
+      );
+      loadProducts();
+    } catch (error) {
+
+    }
+  }
   function paging(numberOfPage,source = []){
     source = source && source.length > 0?source:remoteData.products;
     if(!source.length >0){
@@ -54,23 +90,23 @@ const Products = () => {
     }
     return source.slice(currentLastIndex,lastIndex)
   }
-  useEffect(() => {
-    async function loadProducts() {
-      try {
-        const result = await axios(
-          PRODUCTS_BASE_URL,
-          {
-            headers: {
-              Authorization: "Bearer " + cookies.get("accessToken"),
-            },
-          }
-        );
-        setRemoteData({ products: [...result.data]});
-        setData({products:paging(page,result.data)})
-      } catch (error) {
+  async function loadProducts() {
+    try {
+      const result = await axios(
+        PRODUCTS_BASE_URL,
+        {
+          headers: {
+            Authorization: "Bearer " + cookies.get("accessToken"),
+          },
+        }
+      );
+      setRemoteData({ products: [...result.data]});
+      setData({products:paging(page,result.data)})
+    } catch (error) {
 
-      }
     }
+  }
+  useEffect(() => {
     loadProducts();
 
   }, []);
@@ -141,6 +177,8 @@ const Products = () => {
                         marginLeft: "20%",
                       }}
                     >
+                    <Button onClick={handleCreate} className="mr-3" variant="primary">Add Product</Button>
+                      <ProductModel product ={currentProduct} open={open} handleClose={handleClose} isEdit={isEdit}/>
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="fas fa-search" />
@@ -162,6 +200,10 @@ const Products = () => {
               >
                 <thead className="thead-dark">
                   <tr>
+
+                    <th scope="col" style={{ fontSize: "13px" }}>
+                      Action
+                    </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
                       ID
                     </th>
@@ -173,6 +215,9 @@ const Products = () => {
                     </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
                       Price
+                    </th>
+                    <th scope="col" style={{ fontSize: "13px" }}>
+                      Color
                     </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
                       Des
@@ -224,8 +269,8 @@ const Products = () => {
                         <Render item={item} key={item.id} onToggle={onToggle} />
                       ))} */}
                   {
-                    data && data.products && data.products.length ? data.products.map((item) => (
-                      <Render item={item} key={item.id} onToggle={onToggle} />
+                    data && data.products && data.products.length >0 ? data.products.map((item) => (
+                      <Render item={item} key={item.id} onToggle={onToggle} handleDelete={handleDelete} handleEdit={handleEdit} />
                     )) : <tr scope="row"> <td> Data is empty </td>  </tr>
                   }
                 </tbody>
@@ -246,8 +291,8 @@ const Products = () => {
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
                       </PaginationItem>
-                      <PagingListItem totalRecords = {remoteData.products.length} recordPerPage = {15} currentPage={page} action={setPage}/>
-                      <PaginationItem className={page+1 >= (remoteData.products.length/15) ? "disabled" :""} >
+                      <PagingListItem totalRecords = {remoteData.products.length} recordPerPage = {RECORD_PER_PAGE} currentPage={page} action={setPage}/>
+                      <PaginationItem className={page+1 >= (remoteData.products.length/RECORD_PER_PAGE) ? "disabled" :""} >
                         <PaginationLink
                           href="#pablo"
                           onClick={(e) => setPage(page+1)}
@@ -268,7 +313,7 @@ const Products = () => {
   );
 };
 
-function Render({ item, onToggle }) {
+function Render({ item, onToggle,handleEdit,handleDelete }) {
   // const [toggle, setToggle] = useState(!item.blocked);
   const vidRef = useRef(null);
   const handlePlayVideo = () => {
@@ -277,6 +322,10 @@ function Render({ item, onToggle }) {
   return (
     <tr>
       <td scope="row">
+        <IconButton key={"eidt"+item._id} className="fa fa-edit" color="warning" onClick={()=>{handleEdit(item)}} />
+        <IconButton key={"delete"+item._id} className="fa fa-trash" color="error"  onClick={()=>{handleDelete(item._id)}} /> 
+      </td>
+      <td scope="row">
         <span className="mb-0 text-sm">{item._id}</span>
       </td>
       <td scope="row" >
@@ -284,6 +333,9 @@ function Render({ item, onToggle }) {
       </td>
       <td scope="row">
         <span className="mb-0 text-sm">{item.categories.length ? item.categories.join(", ") : ""}</span>
+      </td>
+      <td scope="row">
+        <span className="mb-0 text-sm">{item.price}</span>
       </td>
       <td scope="row">
         <span className="mb-0 text-sm">{item.color.length ? item.color.join(", ") : ""}</span>
@@ -322,29 +374,8 @@ function Render({ item, onToggle }) {
     </tr>
   );
 }
-function PagingListItem({totalRecords,recordPerPage = 15,currentPage,action} ){
-  if(totalRecords ==0 ) return <> </>
-  const lastPage = (totalRecords%recordPerPage==0) ? totalRecords/recordPerPage: totalRecords/recordPerPage+1;
-  if(lastPage < 10){
-    return range(1,lastPage.toFixed()).map(n=><PagingItem currentPage={currentPage+1} nextPage = {n}  action={action} />)
-  }else{
-    return [range(1,9),...lastPage].map(n=><PagingItem currentPage={currentPage+1} nextPage = {n} action={action} />)
-  }
-}
-function range(_start_, _end_) {
-  return (new Array(_end_ - _start_ + 1)).fill(undefined).map((_, k) =>k + _start_);
-  }
-function PagingItem({currentPage,nextPage,action}){
-  return  <PaginationItem className={nextPage==currentPage ? "active" : ""}>
-  <PaginationLink
-    href="#pablo"
-    onClick={(e) => {
-      action(nextPage-1)
-    }}
-  >
-    {nextPage} <span className="sr-only">(current)</span>
-  </PaginationLink>
-</PaginationItem>
-}
+
+
+
 
 export default Products;

@@ -30,6 +30,7 @@ import ToggleButton from "react-toggle-button";
 import Avatar from "@mui/material/Avatar";
 import dateFormat from "dateformat";
 import { USERS_BASE_URL } from "config/networkConfigs";
+import PagingListItem from "components/Pagings/PaginListItem";
 
 const Users = () => {
   const [data, setData] = useState({ users: [] });
@@ -37,10 +38,27 @@ const Users = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [data1, setData1] = useState({ payments: [] });
   const [next, setNext] = useState(false);
-
+  const [remoteData,setRemoteData] = useState({ users: [] });
+  const [page,setPage] = useState(0);
   const cookies = new Cookies();
-  
-  useEffect(async () => {
+  function paging(numberOfPage,source = []){
+    source = source && source.length > 0?source:remoteData.products;
+    if(!source.length >0){
+      return []
+    }
+    const maxIndex = source.length;
+    const recordPerPage = 15;
+    const currentLastIndex = numberOfPage * recordPerPage;
+    const lastIndex = (currentLastIndex+recordPerPage)<maxIndex?(currentLastIndex+recordPerPage):maxIndex
+    if(recordPerPage >= maxIndex ){
+      return source;
+    }
+    if(currentLastIndex > maxIndex ){
+      return [];
+    }
+    return source.slice(currentLastIndex,lastIndex)
+  }
+  useEffect( () => {
     async function loadUsers(){
       try{
         const result = await axios(
@@ -51,13 +69,14 @@ const Users = () => {
             },
           }
         );
-        console.log(result.data.users);
-        setData(result.data);
+        setRemoteData({ users: [...result.data]});
+        setData({ users:paging(page,result.data)});
+
       }catch{
           console.log("error");
       }
     }
-    await loadUsers();
+    loadUsers();
   }, []);
 
   // useEffect(async () => {
@@ -94,12 +113,12 @@ const Users = () => {
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
-  useEffect(() => {
-    const results = data.users.filter(({ username }) =>
-      username.toLowerCase().includes(searchTerm)
-    );
-    setSearchResults(results);
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   const results = data.users.filter(({ username }) =>
+  //     username.toLowerCase().includes(searchTerm)
+  //   );
+  //   setSearchResults(results);
+  // }, [searchTerm]);
 
   return (
     <div>
@@ -152,7 +171,7 @@ const Users = () => {
                 <thead className="thead-dark">
                   <tr>
                     <th scope="col" style={{ fontSize: "13px" }}>
-                      Visible
+                      Active
                     </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
                       Avatar
@@ -164,85 +183,42 @@ const Users = () => {
                       Email
                     </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
-                      Follower
+                      Permission
                     </th>
                     <th scope="col" style={{ fontSize: "13px" }}>
-                      Following
-                    </th>
-                    <th scope="col" style={{ fontSize: "13px" }}>
-                      Number of subjects
-                    </th>
-                    <th scope="col" style={{ fontSize: "13px" }}>
-                      Joined
-                    </th>
-                    <th scope="col" style={{ fontSize: "13px" }}>
-                      <i className="ni ni-settings-gear-65"></i>
+                      Created at
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {next
-                    ? searchTerm
-                      ? searchResults.map((item, index) => (
-                          <Render key={index} item={item} onToggle={onToggle} />
-                        ))
-                      : data1.users.map((item) => (
-                          <Render
-                            item={item}
-                            key={item.id}
-                            onToggle={onToggle}
-                          />
-                        ))
-                    : searchTerm
-                    ? searchResults.map((item, index) => (
-                        <Render key={index} item={item} onToggle={onToggle} />
-                      ))
-                    : data.users.map((item) => (
-                        <Render item={item} key={item.id} onToggle={onToggle} />
-                      ))}
+                {
+                    data && data.users && data.users.length ? data.users.map((item) => (
+                      <Render item={item} key={item.id} onToggle={onToggle} />
+                    )) : <tr scope="row"> <td> Data is empty </td>  </tr>
+                  }
                 </tbody>
               </Table>
-              {data.users.length >= 10 ? (
                 <CardFooter className="py-4">
                   <nav aria-label="...">
-                    <Pagination
+                  <Pagination
                       className="pagination justify-content-end mb-0"
                       listClassName="justify-content-end mb-0"
                     >
-                      <PaginationItem className="disabled">
+                      <PaginationItem className={page == 0 ? "disabled" :""}>
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => e.preventDefault()}
+                          onClick={(e) => setPage(page-1)}
                           tabIndex="-1"
                         >
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
                       </PaginationItem>
-                      <PaginationItem className={!next ? "active" : ""}>
+                      <PagingListItem totalRecords = {remoteData.users.length} recordPerPage = {15} currentPage={page} action={setPage}/>
+                      <PaginationItem className={page+1 >= (remoteData.users.length/15) ? "disabled" :""} >
                         <PaginationLink
                           href="#pablo"
-                          onClick={(e) => {
-                            setNext(false);
-                          }}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem className={next ? "active" : ""}>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => {
-                            setNext(true);
-                          }}
-                        >
-                          2 <span className="sr-only">(current)</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.nextPage()}
+                          onClick={(e) => setPage(page+1)}
                         >
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>
@@ -251,9 +227,6 @@ const Users = () => {
                     </Pagination>
                   </nav>
                 </CardFooter>
-              ) : (
-                ""
-              )}
             </Card>
           </div>
         </Row>
@@ -281,9 +254,7 @@ function Render({ item, onToggle }) {
       </th>
       <td>{item.username}</td>
       <td>{item.email}</td>
-      <td>{item.follower.length}</td>
-      <td>{item.following.length}</td>
-      <td>{item.subjects.length}</td>
+      <td>{item.isAdmin?"Admin":"Normal user"}</td>
       <td>{new Date(item.createdAt).toLocaleDateString("en-US")}</td>
       <td className="text-right">
         <UncontrolledDropdown>
@@ -298,9 +269,9 @@ function Render({ item, onToggle }) {
             <i className="fas fa-ellipsis-v" />
           </DropdownToggle>
           <DropdownMenu className="dropdown-menu-arrow" right>
-            <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+            <DropdownItem href={"/admin/user/" + item._id + "/info"} onClick={(e) => e.preventDefault()}>
               <Link
-                to={"/admin/user/" + item.id + "/info"}
+                to={"/admin/user/" + item._id + "/info"}
                 className="edit-link"
               >
                 <i className="fas fa-eye" /> View detail
