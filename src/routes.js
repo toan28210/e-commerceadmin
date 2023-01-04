@@ -9,10 +9,10 @@ import Products from "views/examples/Products.js";
 import Orders from "views/examples/Orders.js";
 import UserDetail from "views/examples/UserDetail.js";
 import Payments from "views/examples/Payments.js";
-import PaymentDetail from "views/examples/PaymentDetail.js"
 import PaymentOuts from "views/examples/PaymentOuts.js"
 import PaymentOutDetail from "views/examples/PaymentOutDetail";
 import Dashboard from "views/examples/Dashboard";
+import ProductDetail from "views/examples/ProductDetail";
 
 var routes = [
   // {
@@ -50,22 +50,22 @@ var routes = [
     component: Orders,
     layout: "/admin",
   },
+  // {
+  //   path: "/payments",
+  //   name: "Deposit",
+  //   icon: "ni ni-money-coins text-orange",
+  //   component: Payments,
+  //   layout: "/admin",
+  // },
+  // {
+  //   path: "/payments-out",
+  //   name: "Withdraw money",
+  //   icon: "ni ni-money-coins text-yellow",
+  //   component: PaymentOuts,
+  //   layout: "/admin",
+  // },
   {
-    path: "/payments",
-    name: "Deposit",
-    icon: "ni ni-money-coins text-orange",
-    component: Payments,
-    layout: "/admin",
-  },
-  {
-    path: "/payments-out",
-    name: "Withdraw money",
-    icon: "ni ni-money-coins text-yellow",
-    component: PaymentOuts,
-    layout: "/admin",
-  },
-  {
-    path: "/user-profile",
+    path: "/admin-profile",
     name: "Admin Profile",
     icon: "ni ni-single-02 text-pink",
     component: Profile,
@@ -99,9 +99,9 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/payment/:idPayment",
+    path: "/products/:id",
     exact: true,
-    component: ({ match }) => <PaymentDetail match={match} />,
+    component: ({ match }) => <ProductDetail />,
     layout: "/admin",
   },
   {
