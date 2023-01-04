@@ -49,7 +49,7 @@ const Products = () => {
 
   function handleCreate(){
     handleOpen();
-    setCurrentProduct();
+    setCurrentProduct({});
     setIsEdit(false);
   }
   function handleEdit(product){

@@ -18,7 +18,7 @@ import Users from "views/examples/Users";
 import Products from "views/examples/Products";
 import Payments from "views/examples/Payments";
 import Orders from "views/examples/Orders";
-import UserDetail from "views/examples/PaymentDetail";
+import UserDetail from "views/examples/UserDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -29,7 +29,7 @@ root.render(
         <Route path="index" element = {<Dashboard/>} />
         <Route path="users" element = {<Users key="users"/>} />
         <Route path="products" element = {<Products key="products-key"/>} />
-        <Route path="groups" element = {<Orders key="orderds-key" />} />
+        <Route path="orders" element = {<Orders key="orderds-key" />} />
         <Route path="payments" element = {<Payments  key="payments-key" />} />
         <Route path="user" element = {<Outlet/>} >
            <Route path=":idUser/info" element={<UserDetail/> }/> 

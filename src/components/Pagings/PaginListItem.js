@@ -2,10 +2,10 @@
   import PagingItem from "./PagingItem";
 
 function PagingListItem({totalRecords,recordPerPage = 15,currentPage,action} ){
-    if(totalRecords ==0 ) return <> </>
-    const lastPage = (totalRecords%recordPerPage==0) ? totalRecords/recordPerPage: totalRecords/recordPerPage+1;
+    if(totalRecords == 0 ) return <> </>
+    const lastPage = (totalRecords%recordPerPage==0)? totalRecords/recordPerPage: totalRecords/recordPerPage+1;
     if(lastPage < 10){
-      return range(1,lastPage.toFixed()).map(n=><PagingItem currentPage={currentPage+1} nextPage = {n}  action={action} />)
+      return range(1,Math.floor(lastPage)).map(n=><PagingItem currentPage={currentPage+1} nextPage = {n}  action={action} />)
     }else{
       return [range(1,9),...lastPage].map(n=><PagingItem currentPage={currentPage+1} nextPage = {n} action={action} />)
     }

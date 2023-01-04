@@ -21,24 +21,33 @@ import React from "react";
 import Cookies from "universal-cookie";
 import ToggleButton from "react-toggle-button";
 import { Avatar } from "@mui/material";
+import { USERS_BASE_URL } from "config/networkConfigs";
 
 const UserDetail = (props) => {
   const cookies = new Cookies();
   const { idUser } = useParams();
   const [data, setData] = useState({ user: [] });
 
-  useEffect(async () => {
-    console.log(idUser);
-    const result = await axios.get(
-      "`${BASE_URL}/user/" + idUser + "/info",
-      {
-        headers: {
-          Authorization: "Bearer " + cookies.get("accessToken"),
-        },
-      }
-    );
-    console.log(result.data.user);
-    setData(result.data);
+  async function fetchUserInfo(){
+    try{
+      const result = await axios.get(
+        `${USERS_BASE_URL}/find/${idUser}`,
+        {
+          headers: {
+            Authorization: "Bearer " + cookies.get("accessToken"),
+          },
+        }
+      );
+      console.log(result.data.user);
+      setData(result.data);
+    }
+    catch{
+
+    }
+  
+  }
+  useEffect(() => {
+    fetchUserInfo();
   }, []);
 
   // const onToggle = (id) => {
@@ -76,7 +85,7 @@ const UserDetail = (props) => {
           <Row style={{ width: "600px" }}>
             <Col lg="7" md="10">
               <h3 className="display-4  text-white">
-                This is {data.user.username}.
+                This is {data.username}.
               </h3>
               <p className="text-white mt-0 mb-5">
                 You can see this user's details through the information below.
@@ -98,7 +107,7 @@ const UserDetail = (props) => {
                         alt="..."
                         style={{ width: "165px", height: "160px" }}
                         className="rounded-circle center"
-                        src={data.user.avatar}
+                        src={data.avatar}
                       />
                     </a>
                   </div>
@@ -129,7 +138,7 @@ const UserDetail = (props) => {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    {data.user.username}
+                    {data.username}
                     {/* <span className="font-weight-light">, 27</span> */}
                   </h3>
                 </div>
@@ -162,7 +171,7 @@ const UserDetail = (props) => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            Value={data.user.email}
+                            Value={data.email}
                           />
                         </FormGroup>
                       </Col>
@@ -176,7 +185,7 @@ const UserDetail = (props) => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            Value={data.user.username}
+                            Value={data.username}
                           />
                         </FormGroup>
                       </Col>
@@ -192,7 +201,7 @@ const UserDetail = (props) => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            Value={data.user.phone}
+                            Value={data.phone}
                           />
                         </FormGroup>
                       </Col>
@@ -207,7 +216,7 @@ const UserDetail = (props) => {
                           <Input
                             className="form-control-alternative"
                             Value={new Date(
-                              data.user.createdAt
+                              data.createdAt
                             ).toLocaleDateString("en-US")}
                           />
                         </FormGroup>

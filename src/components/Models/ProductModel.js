@@ -92,6 +92,18 @@ export default function ProductModel(props) {
             setCategories(productProps.categories);
             setSizes({...sizes,...productProps.size.reduce((acc,curr)=> (acc[curr]=true,acc),{})})
         }
+        else{
+            setProduct({});
+            setCategories([]);
+            setSizes({
+                S: false,
+                XS: false,
+                M: false,
+                L: false,
+                XL: false,
+                XXL: false
+            })
+        }
     },[productProps])
     return (
         <div>
