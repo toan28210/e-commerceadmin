@@ -79,7 +79,7 @@ const Dashboard = (props) => {
           return acc;
         }, {});
         const sortedOrders = orders.reduce((acc,order)=>{ 
-          acc[order._id] = order.amount;
+          acc[order.address] = order.amount;
           return acc;
            },{});
         const recentOrders = Object.keys(sortedOrders)
@@ -93,7 +93,7 @@ const Dashboard = (props) => {
           labels: recentOrders,
           datasets: [
             {
-              label: 'Recent orders (order Id)',
+              label: 'Recent orders',
               data: recentOrders.map((day) =>  sortedOrders[day]|| 0),
               fill: false,
               borderColor: "rgba(75,192,192,1)",
@@ -131,57 +131,6 @@ const Dashboard = (props) => {
     fetchDailySalesData();
   }, []);
 
-  useEffect(() => {
-    const fetchDailySalesData = async () => {
-      try {
-        const res = await axios.get(ORDERS_BASE_URL,{
-          headers: headerAuthInterceptor(),
-        });
-        const orders = res.data;
-
-        // Group orders by day and sum the amount for each day
-        const dailySales = orders.reduce((acc, order) => {
-          const date = new Date(order.createdAt).toLocaleDateString();
-          if (!acc[date]) {
-            acc[date] = order.amount;
-          } else {
-            acc[date] += order.amount;
-          }
-          return acc;
-        }, {});
-
-        // Get the last 7 days
-        const last7Days = Object.keys(dailySales)
-          .slice(-7)
-          .sort((a, b) => new Date(a) - new Date(b));
-
-        // Create the chart data
-        const data = {
-          labels: last7Days,
-          datasets: [
-            {
-              label: "Daily Evenue",
-              data: last7Days.map((day) => dailySales[day] || 0),
-              fill: false,
-              backgroundColor: [ 'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)'],
-              borderColor: 'rgba(75,192,192,1)',
-            },
-          ],
-        };
-
-        setDailySalesData(dailySales);
-        setChartData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchDailySalesData();
-  }, []);
 
 // Iterate over each order in the array
 // orders.forEach(order => {
@@ -407,7 +356,7 @@ const Dashboard = (props) => {
                           Overview
                         </h6>
                         <h3 className="text-white mb-0">
-                          Current orders(Order Id)
+                          Current orders
                         </h3>
                       </div>
                     </Row>
