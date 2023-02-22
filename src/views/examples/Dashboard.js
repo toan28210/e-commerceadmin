@@ -5,6 +5,9 @@ import classnames from "classnames";
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Pie, Bar, Doughnut } from "react-chartjs-2";
+import { ORDERS_BASE_URL } from "config/networkConfigs";
+import { headerAuthInterceptor } from 'config/headerIntercepter.js';
+
 // reactstrap components
 import {
   Button,
@@ -21,16 +24,200 @@ import Header from "components/Headers/Header.js";
 
 const Dashboard = (props) => {
   const cookies = new Cookies();
-  // const [Order, setGroup] = useState({ groups: [] });
-  // const [Payment, setPayment] = useState({ payments: [] });
-  // const [PaymentOut, setPaymentOut] = useState({ payments: [] });
-  // const [dateRange, setDateRange] = useState([]);
-  // const [amount, setAmount] = useState(0);
-  // const [amount1, setAmount1] = useState(0);
-  // const [dataChart, setDataChart] = useState([]);
+  const [dailySalesData, setDailySalesData] = useState(null);
+  const [orders, setOrdersData] = useState(
+    {
+      labels: [],
+      datasets: [
+        {
+          label: 'Network error',
+          data: [],
+          fill: false,
+          borderColor: "rgba(75,192,192,1)",
+          backgroundColor: "rgba(75,192,192,0.4)",
+          borderWidth: 1,
+        },
+      ],
+    }
+  );
 
-  // console.log("amount", amount);
+  const [chartData, setChartData] = useState( {
+    labels: [],
+    datasets: [
+      {
+        label: 'Network error',
+        data: [],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  });
+  useEffect(() => {
+    const fetchDailySalesData = async () => {
+      try {
+        const res = await axios.get(ORDERS_BASE_URL,{
+          headers: headerAuthInterceptor(),
+        });
+        const orders = res.data;
 
+        // Group orders by day and sum the amount for each day
+        const dailySales = orders.reduce((acc, order) => {
+          const date = new Date(order.createdAt).toLocaleDateString();
+          if (!acc[date]) {
+            acc[date] = order.amount;
+          } else {
+            acc[date] += order.amount;
+          }
+          return acc;
+        }, {});
+        const sortedOrders = orders.reduce((acc,order)=>{ 
+          acc[order._id] = order.amount;
+          return acc;
+           },{});
+        const recentOrders = Object.keys(sortedOrders)
+          .slice(-7)
+          .sort((a, b) => a - b);
+        // Get the last 7 days
+        const last7Days = Object.keys(dailySales)
+          .slice(-7)
+          .sort((a, b) => new Date(a) - new Date(b));
+        const last7orders = {
+          labels: recentOrders,
+          datasets: [
+            {
+              label: 'Recent orders (order Id)',
+              data: recentOrders.map((day) =>  sortedOrders[day]|| 0),
+              fill: false,
+              borderColor: "rgba(75,192,192,1)",
+              backgroundColor: "rgba(75,192,192,0.4)",
+              borderWidth: 1,
+            },
+          ],
+        }
+
+        // Create the chart data
+        const data = {
+          labels: last7Days,
+          datasets: [
+            {
+              label: "Daily Evenue",
+              data: last7Days.map((day) => dailySales[day] || 0),
+              fill: false,
+              backgroundColor: [ 'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'],
+              borderColor: 'rgba(75,192,192,1)',
+            },
+          ],
+        };
+        setOrdersData(last7orders);
+        setDailySalesData(dailySales);
+        setChartData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDailySalesData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDailySalesData = async () => {
+      try {
+        const res = await axios.get(ORDERS_BASE_URL,{
+          headers: headerAuthInterceptor(),
+        });
+        const orders = res.data;
+
+        // Group orders by day and sum the amount for each day
+        const dailySales = orders.reduce((acc, order) => {
+          const date = new Date(order.createdAt).toLocaleDateString();
+          if (!acc[date]) {
+            acc[date] = order.amount;
+          } else {
+            acc[date] += order.amount;
+          }
+          return acc;
+        }, {});
+
+        // Get the last 7 days
+        const last7Days = Object.keys(dailySales)
+          .slice(-7)
+          .sort((a, b) => new Date(a) - new Date(b));
+
+        // Create the chart data
+        const data = {
+          labels: last7Days,
+          datasets: [
+            {
+              label: "Daily Evenue",
+              data: last7Days.map((day) => dailySales[day] || 0),
+              fill: false,
+              backgroundColor: [ 'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)'],
+              borderColor: 'rgba(75,192,192,1)',
+            },
+          ],
+        };
+
+        setDailySalesData(dailySales);
+        setChartData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDailySalesData();
+  }, []);
+
+// Iterate over each order in the array
+// orders.forEach(order => {
+//     // Get the date of the order and format it to a human-readable string
+//     const orderDate = new Date(order.createdAt);
+//     const humanDate = orderDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    
+//     // If the map doesn't have an entry for the current day, set the sum to the current order's amount
+//     // Otherwise, add the current order's amount to the existing sum for the day
+//     if (!orderMap.has(humanDate)) {
+//         orderMap.set(humanDate, order.amount);
+//     } else {
+//         orderMap.set(humanDate, orderMap.get(humanDate) + order.amount);
+//     }
+// });
+
+// const last7Days = Array.from(orderMap.entries())
+//     .slice(-7)
+//     .map(entry => entry[1]);
+
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+  
+  
   // const data = {
   //   labels: Order.groups.map((o) => o.group_name),
   //   datasets: [
@@ -191,21 +378,19 @@ const Dashboard = (props) => {
                           Overview
                         </h6>
                         <h3 className="text-white mb-0">
-                          Statistics of depositCoins and withdraw money every day.
+                          Statistics of revenue for last 7 days
                         </h3>
                       </div>
                     </Row>
                   </CardHeader>
                   <CardBody>
-                    {/* Chart */}
+                    Chart
                     <div className="chart">
-                      {/* <Bar
+                      <Bar
                         height={10}
-                        options={{
-                          maintainAspectRatio: false,
-                        }}
-                        data={deviceSaleData}
-                      /> */}
+                        options={chartOptions}
+                        data={chartData}
+                      />
                     </div>
                   </CardBody>
                 </Card>
@@ -222,7 +407,7 @@ const Dashboard = (props) => {
                           Overview
                         </h6>
                         <h3 className="text-white mb-0">
-                          Statistics of the number of users in each order.
+                          Current orders(Order Id)
                         </h3>
                       </div>
                     </Row>
@@ -230,13 +415,13 @@ const Dashboard = (props) => {
                   <CardBody>
                     {/* Chart */}
                     <div className="chart">
-                      {/* <Bar
+                      <Bar
                         height={10}
                         options={{
                           maintainAspectRatio: false,
                         }}
-                        data={data}
-                      /> */}
+                        data={orders}
+                      />
                     </div>
                   </CardBody>
                 </Card>
