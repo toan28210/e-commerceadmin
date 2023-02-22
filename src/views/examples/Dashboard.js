@@ -79,7 +79,7 @@ const Dashboard = (props) => {
           return acc;
         }, {});
         const sortedOrders = orders.reduce((acc,order)=>{ 
-          acc[order.address] = order.amount;
+          acc[order._id] = order.amount;
           return acc;
            },{});
         const recentOrders = Object.keys(sortedOrders)
