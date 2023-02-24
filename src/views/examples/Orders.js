@@ -255,7 +255,7 @@ function Render({ item, onToggle }) {
         {item.amount}
       </td>
       <td scope="row">
-        <span className="mb-0 text-sm">{item.address?`${item.address.City}, ${item.address.Country}`:""}</span>
+        <span className="mb-0 text-sm">{item.address?`${item.address.addressStreet}, ${item.address.address}`:""}</span>
       </td>
       <td>{products?products.map((e)=><p><span>Quantity:{e.quantity};</span> <Link to={`/admin/products/${e.productId}`}>ProductID:{e.productId} </Link> </p>):""}</td>
       <td>{userId?<p><Link to={`/admin/user/${userId}/info`}>userId: {userId}</Link> </p>:""}</td>

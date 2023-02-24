@@ -75,35 +75,39 @@ export default function ProductModel(props) {
 
         });
     };
-    React.useEffect(() => {
-        async function loadCategories() {
-            try {
-                const res = await axios.get(CATEGORIES_BASE_URL, { headers: headerAuthInterceptor() });
-                setCategories(res.data)
-            } catch (error) {
+    async function loadCategories() {
+        try {
+            const res = await axios.get(CATEGORIES_BASE_URL, { headers: headerAuthInterceptor() });
+            setCategories(res.data)
+        } catch (error) {
 
-            }
-        };
+        }
+    };
+    React.useEffect(() => {
         loadCategories();
     }, [])
     React.useEffect(()=>{
-        if(isEdit){
-            setProduct(productProps);
-            setCategories(productProps.categories);
-            setSizes({...sizes,...productProps.size.reduce((acc,curr)=> (acc[curr]=true,acc),{})})
-        }
-        else{
-            setProduct({});
-            setCategories([]);
-            setSizes({
-                S: false,
-                XS: false,
-                M: false,
-                L: false,
-                XL: false,
-                XXL: false
-            })
-        }
+       async function loadModelDetail(){
+            await loadCategories();
+            if(isEdit){
+                setProduct(productProps);
+                setCurrentCategory(productProps.categories)
+                setSizes({...sizes,...productProps.size.reduce((acc,curr)=> (acc[curr]=true,acc),{})})
+            }
+            else{
+                setProduct({});
+                setCurrentCategory('')
+                setSizes({
+                    S: false,
+                    XS: false,
+                    M: false,
+                    L: false,
+                    XL: false,
+                    XXL: false
+                })
+            }
+       }
+        loadModelDetail();
     },[productProps])
     return (
         <div>
@@ -238,5 +242,5 @@ export default function ProductModel(props) {
                 </Box>
             </Modal>
         </div>
-    );
+        );
 }
